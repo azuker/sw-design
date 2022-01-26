@@ -1,3 +1,7 @@
+# Temp
+puml/samples/*.md
+!puml/samples/index.md
+
 # Logs
 logs
 *.log
