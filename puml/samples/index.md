@@ -2,6 +2,8 @@
 
 Go back to [PlantUML root docs](../index.md).
 
+> Note: the links below are not accessible yet
+
 ## Docs
 
 1. [Markdown + PlantUML](md-puml.md)
