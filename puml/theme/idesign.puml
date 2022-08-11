@@ -50,8 +50,12 @@ rectangle "e_label" as e_alias #aqua
 database "e_label" as e_alias #aqua
 !enddefinelong
 
+!definelong Gateway(e_alias, e_label)
+rectangle "e_label" as e_alias #goldenrod
+'#DAA520 / goldenrod
+!enddefinelong
+
 !definelong Agent(e_alias, e_label)
 rectangle "e_label" as e_alias #moccasin
 '#FFE4B5 / moccasin
-'#DAA520 / goldenrod
 !enddefinelong
