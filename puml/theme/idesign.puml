@@ -49,3 +49,9 @@ rectangle "e_label" as e_alias #aqua
 !definelong Db(e_alias, e_label)
 database "e_label" as e_alias #aqua
 !enddefinelong
+
+!definelong Agent(e_alias, e_label)
+rectangle "e_label" as e_alias #moccasin
+'#FFE4B5 / moccasin
+'#DAA520 / goldenrod
+!enddefinelong
