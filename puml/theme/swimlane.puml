@@ -1,0 +1,59 @@
+!if %not(%variable_exists("$BGCOLOR"))
+' FFFFFF had issues at times
+!$BGCOLOR = "#FFFFFE"
+!endif
+
+skinparam backgroundColor $BGCOLOR
+skinparam useBetaStyle false
+
+' skinparam roundcorner 20
+
+skinparam title {
+	FontColor	                 #000
+	BorderColor	                 #c2c2c2
+	' FontSize	    	         16
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #f5f5f5-#f2f2f2
+}
+
+skinparam rectangle {
+	BorderThickness 2
+	BorderColor #gray
+}
+
+!definelong Client(e_alias, e_label)
+|#lawngreen|e_alias|e_label
+!enddefinelong
+
+!definelong Manager(e_alias, e_label)
+|#yellow|e_alias|e_label
+!enddefinelong
+
+!definelong Engine(e_alias, e_label)
+|#orange|e_alias|e_label
+!enddefinelong
+
+!definelong Accessor(e_alias, e_label)
+|#lightgray|e_alias|e_label
+!enddefinelong
+
+!definelong Util(e_alias, e_label)
+|#violet|e_alias|e_label
+!enddefinelong
+
+!definelong Resource(e_alias, e_label)
+|#aqua|e_alias|e_label
+!enddefinelong
+
+!definelong Db(e_alias, e_label)
+|#aqua|e_alias|e_label
+!enddefinelong
+
+!definelong Gateway(e_alias, e_label)
+|#goldenrod|e_alias|e_label
+!enddefinelong
+
+!definelong Agent(e_alias, e_label)
+|#moccasin|e_alias|e_label
+!enddefinelong
