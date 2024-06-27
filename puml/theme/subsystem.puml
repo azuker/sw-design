@@ -1,0 +1,93 @@
+!if %not(%variable_exists("$BGCOLOR"))
+' FFFFFF had issues at times
+!$BGCOLOR = "#FFFFFE"
+!endif
+
+skinparam backgroundColor $BGCOLOR
+skinparam handwritten false
+skinparam rectangle {
+    BorderThickness<<Label>> 0
+    BackGroundColor<<Label>> #FFFFFF
+    BorderColor<<Tier>> #e0ddd5
+}
+skinparam card {
+    BorderColor #e0ddd5
+    Shadowing false
+}
+
+clients --[hidden]> managers
+managers --[hidden]> engines
+engines --[hidden]> accessors
+accessors --[hidden]> resources
+
+!definelong Subsystem()
+together
+!enddefinelong
+
+!definelong TierClients()
+rectangle "clients" as clients <<Tier>>
+!enddefinelong
+
+!definelong TierManagers()
+rectangle "managers" as managers <<Tier>>
+!enddefinelong
+
+!definelong TierEngines()
+rectangle "engines" as engines <<Tier>>
+!enddefinelong
+
+!definelong TierAccessors()
+rectangle "accessors" as accessors <<Tier>>
+!enddefinelong
+
+!definelong TierResources()
+rectangle "resources" as resources <<Tier>>
+!enddefinelong
+
+!definelong TierUtils()
+card "utilities" <<Tier>>
+!enddefinelong
+
+!definelong Link(e_alias1, e_alias2)
+e_alias1 -[hidden]> e_alias2
+!enddefinelong
+
+!definelong LinkUtil(e_alias1, e_alias2)
+e_alias1 --[hidden]> e_alias2
+!enddefinelong
+
+!definelong Client(e_alias, e_label)
+rectangle "e_label" as e_alias #lawngreen
+!enddefinelong
+
+!definelong Manager(e_alias, e_label)
+rectangle "e_label" as e_alias #yellow
+!enddefinelong
+
+!definelong Engine(e_alias, e_label)
+rectangle "e_label" as e_alias #orange
+!enddefinelong
+
+!definelong Accessor(e_alias, e_label)
+rectangle "e_label" as e_alias #lightgray
+!enddefinelong
+
+!definelong Util(e_alias, e_label)
+rectangle "e_label" as e_alias #violet
+!enddefinelong
+
+!definelong Resource(e_alias, e_label)
+rectangle "e_label" as e_alias #aqua
+!enddefinelong
+
+!definelong Db(e_alias, e_label)
+database "e_label" as e_alias #aqua
+!enddefinelong
+
+!definelong Gateway(e_alias, e_label)
+rectangle "e_label" as e_alias #goldenrod
+!enddefinelong
+
+!definelong Agent(e_alias, e_label)
+rectangle "e_label" as e_alias #moccasin
+!enddefinelong
