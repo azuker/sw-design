@@ -1,0 +1,28 @@
+!if %not(%variable_exists("$BGCOLOR"))
+' FFFFFF had issues at times
+!$BGCOLOR = "#FFFFFE"
+!endif
+
+skinparam backgroundColor $BGCOLOR
+skinparam useBetaStyle false
+
+!pragma useVerticalIf on
+
+' skinparam roundcorner 20
+
+skinparam title {
+	FontColor	                 #000
+	BorderColor	                 #c2c2c2
+	' FontSize	    	         16
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #f5f5f5-#f2f2f2
+}
+
+!definelong Error()
+#pink::Error;
+!enddefinelong
+
+!definelong IconTimer()
+:<$ma_timer{scale=1}>;
+!enddefinelong

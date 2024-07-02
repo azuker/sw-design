@@ -1,0 +1,4 @@
+' This is required to grant access to all icons.
+' Full list is available at: https://github.com/plantuml/plantuml-stdlib/tree/master/material
+!include <material/common>
+!include <material/timer>
