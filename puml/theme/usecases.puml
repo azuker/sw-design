@@ -20,7 +20,7 @@ skinparam title {
 }
 
 !definelong Error()
-#pink::Error;
+#pink:Error;
 !enddefinelong
 
 !definelong IconTimer()
