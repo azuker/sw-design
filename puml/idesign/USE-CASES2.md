@@ -2,7 +2,7 @@
 
 ## Activity Diagrams
 
-### Add Photographer
+### Add Tradesman / Contractor
 
 ```plantuml
 @startuml
@@ -10,7 +10,7 @@
 !define ThemePath https://azuker.github.io/sw-design/puml/theme
 !includeurl ThemePath//usecases.puml
 
-title Add Photographer
+title Add Tradesman / Contractor
 
 start
   :Apply for membership;
@@ -26,7 +26,7 @@ stop
 @enduml
 ```
 
-### Request Photographer
+### Request Tradesman
 
 ```plantuml
 @startuml
@@ -34,22 +34,22 @@ stop
 !define ThemePath https://azuker.github.io/sw-design/puml/theme
 !includeurl ThemePath//usecases.puml
 
-title Request Photographer
+title Request Tradesman
 
 start
-  :Request photographer;
+  :Request tradesman;
   :Verify request;
   if () then (Not allowed)
     Error()
   else (OK)
-    :Match photographer;
+    :Match tradesman;
   endif
 stop
 
 @enduml
 ```
 
-### Match Photographer
+### Match Tradesman
 
 ```plantuml
 @startuml
@@ -57,7 +57,7 @@ stop
 !define ThemePath https://azuker.github.io/sw-design/puml/theme
 !includeurl ThemePath//usecases.puml
 
-title Match Photographer
+title Match Tradesman
 
 start
   :Request match;
@@ -74,7 +74,7 @@ stop
 @enduml
 ```
 
-### Assign Photographer
+### Assign Tradesman
 
 ```plantuml
 @startuml
@@ -82,7 +82,7 @@ stop
 !define ThemePath https://azuker.github.io/sw-design/puml/theme
 !includeurl ThemePath//usecases.puml
 
-title Assign Photographer
+title Assign Tradesman
 
 start
   :Request assignment;
@@ -108,7 +108,7 @@ stop
 @enduml
 ```
 
-### Terminate Photographer
+### Terminate Tradesman
 
 ```plantuml
 @startuml
@@ -116,7 +116,7 @@ stop
 !define ThemePath https://azuker.github.io/sw-design/puml/theme
 !includeurl ThemePath//usecases.puml
 
-title Terminate Photographer
+title Terminate Tradesman
 
 start
   :Request termination;
@@ -125,14 +125,14 @@ start
     Error()
   else (OK)
     :Terminate from active projects;
-    :Make photographer available;
+    :Make tradesman available;
   endif
 stop
 
 @enduml
 ```
 
-### Pay Photographer
+### Pay Tradesman
 
 ```plantuml
 @startuml
@@ -141,7 +141,7 @@ stop
 !include ThemePath//usecases-icons.puml
 !include ThemePath//usecases.puml
 
-title Pay Photographer
+title Pay Tradesman
 
 start
   fork
@@ -150,7 +150,7 @@ start
     IconTimer()
   end fork {Scheduled Time >= Time}
 
-  :Pay photographer;
+  :Pay tradesman;
 stop
 
 @enduml
@@ -172,7 +172,7 @@ start
   if () then (Not allowed)
     Error()
   else (OK)
-    :Add required abilities, skill level, location, duration, etc.;
+    :Add required trades, skills,\nbill rates, location, duration, etc.;
     :Activate project;
   endif
 stop
@@ -196,7 +196,7 @@ start
   if () then (Not allowed)
     Error()
   else (OK)
-    :Release photographers;
+    :Release tradesmen;
     :Close project;
   endif
 stop
