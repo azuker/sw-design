@@ -21,6 +21,10 @@
 
 > *Instructions: A bullet list of key goals of the product and the planned release*
 
+### Personas and Usage:
+
+> *Instructions: A bullet list of personas and relevant usage interaction attributes*
+
 ### Use-cases:
 
 > *Instructions: A hierarchical use-case bullet list representing the scenarios the product and system should support*
