@@ -1,0 +1,280 @@
+!if %not(%variable_exists("$BGCOLOR"))
+    ' FFFFFF had issues at times
+    !$BGCOLOR = "#FFFFFE"
+!endif
+
+skinparam backgroundColor $BGCOLOR
+skinparam WrapWidth 200
+skinparam rectangle {
+    BorderColor<<Tier>> #e0ddd5
+}
+skinparam component {
+    ArrowColor Transparent
+}
+
+hide <<Tier>> stereotype
+
+!$system_json = {
+    "clients": {
+        "count": 0,
+        "list": [],
+        "prefix": "client",
+        "color": "lawngreen",
+        "maxDisplaySequence": 5
+    },
+    "managers": {
+        "count": 0,
+        "list": [],
+        "prefix": "manager",
+        "color": "yellow",
+        "maxDisplaySequence": 5
+    },
+    "engines": {
+        "count": 0,
+        "list": [],
+        "prefix": "engine",
+        "color": "orange",
+        "maxDisplaySequence": 5
+    },
+    "accessors": {
+        "count": 0,
+        "list": [],
+        "prefix": "accessor",
+        "color": "lightgray",
+        "maxDisplaySequence": 5
+    },
+    "resources": {
+        "count": 0,
+        "list": [],
+        "prefix": "resource",
+        "color": "aqua",
+        "maxDisplaySequence": 5
+    },
+    "utils": {
+        "count": 0,
+        "list": [],
+        "prefix": "util",
+        "color": "violet",
+        "maxDisplaySequence": 15
+    }
+}
+
+!procedure $component($tier_name, $label, $color = 0, $shape = rectangle)
+    !$tier = $system_json[$tier_name]
+    !$count = %intval($tier.count) + 1
+    !$tier = %json_set($tier, count, $count)
+
+    !if ($color == 0)
+        !$color = $tier.color
+    !endif
+
+    !$alias = $tier.prefix + $tier.count
+
+    !$item = {}
+    !$item = %json_set($item, alias, $alias)
+    !$item = %json_set($item, color, $color)
+    !$item = %json_set($item, label, $label)
+    !$item = %json_set($item, shape, $shape)
+    
+    !$list = %json_add($tier.list, $item)
+    !$tier = %json_set($tier, list, $list)
+    
+    !$system_json = %json_set($system_json, $tier_name, $tier)
+!endprocedure
+
+!procedure $render_components($tier_name)
+    !$tier = $system_json[$tier_name]
+    !$list = $tier.list
+    !$counter = 0
+
+    !foreach $item in $list
+        !$counter = $counter + 1
+        !$alias = $tier.prefix + $tier.count
+
+        $item.shape "$item.label" as $item.alias #$item.color
+    !endfor
+!endprocedure
+
+!procedure $gen_links($tier_name, $down = 0)
+    !$counter = 0
+    !$tier = $system_json[$tier_name]
+    !$list = $tier.list
+    !$prefix = $tier.prefix
+    !$max_components = %intval($tier.maxDisplaySequence)
+
+    !foreach $item in $list
+        !$counter = $counter + 1
+        !$current = $prefix + %string($counter)
+        !$index_multiplier = %intval($counter / ($max_components + 1))
+
+        !if ($counter > 1)
+            !$dep_number = $counter - 1
+
+            !if ($counter > $max_components)
+                !$dep_number = $dep_number + 1 - $max_components
+                !$dep = $prefix + %string($dep_number)
+
+                !if ($down > 0)
+                    $dep -[hidden] $current
+                !else
+                    $dep -[hidden]- $current
+                !endif
+            !else
+                !$dep = $prefix + %string($dep_number)
+
+                !if ($down > 0)
+                    $dep -[hidden]- $current
+                !else
+                    $dep -[hidden] $current
+                !endif
+            !endif
+        !endif
+    !endfor
+!endprocedure
+
+!procedure $gen_unlimited_links($list)
+    !$prev = 0
+    !foreach $item in $list
+        !if ($prev != 0)
+            $prev -- $item
+        !endif
+        !$prev = $item
+    !endfor
+!endprocedure
+
+!procedure $gen_tier_links($source, $target)
+    !$source_tier = $system_json[$source]
+    !$target_tier = $system_json[$target]
+
+    !$max_components = %intval($source_tier.maxDisplaySequence)
+    !$count = %intval($source_tier.count)
+
+    !if ($count == 0)
+        $source -[hidden]- $target
+    !else
+        !$rows = %intval($count / ($max_components + 1))
+        !if ($rows == 0)
+            $source -[hidden]- $target
+        !elseif ($rows == 1)
+            $source --[hidden]- $target
+        !elseif ($rows == 2)
+            $source ---[hidden]- $target
+        !elseif ($rows == 3)
+            $source ----[hidden]- $target
+        !elseif ($rows == 4)
+            $source ------[hidden]- $target
+        !elseif ($rows == 5)
+            $source -------[hidden]- $target
+        !elseif ($rows == 6)
+            $source --------[hidden]- $target
+        !elseif ($rows == 7)
+            $source ---------[hidden]- $target
+        !elseif ($rows == 8)
+            $source ----------[hidden]- $target
+        !endif
+    !endif
+!endprocedure
+
+!procedure Subsystem()
+    together
+!endprocedure
+
+!procedure TierClients()
+    rectangle "clients" as clients <<Tier>>
+!endprocedure
+
+!procedure TierManagers()
+    rectangle "managers" as managers <<Tier>>
+!endprocedure
+
+!procedure TierEngines()
+    rectangle "engines" as engines <<Tier>>
+!endprocedure
+
+!procedure TierAccessors()
+    rectangle "accessors" as accessors <<Tier>>
+!endprocedure
+
+!procedure TierResources()
+    rectangle "resources" as resources <<Tier>>
+!endprocedure
+
+!procedure TierUtils()
+    rectangle "utilities" as utils <<Tier>>
+!endprocedure
+
+!procedure Client(e_label)
+    $component(clients, e_label)
+!endprocedure
+
+!procedure Manager(e_label)
+    $component(managers, e_label)
+!endprocedure
+
+!procedure Engine(e_label)
+    $component(engines, e_label)
+!endprocedure
+
+!procedure Accessor(e_label)
+    $component(accessors, e_label)
+!endprocedure
+
+!procedure Util(e_label)
+    $component(utils, e_label)
+!endprocedure
+
+!procedure Resource(e_label)
+    $component(resources, e_label)
+!endprocedure
+
+!procedure Db(e_label)
+    $component(resources, e_label, aqua, database)
+!endprocedure
+
+!procedure Gateway(e_label)
+    $component(managers, e_label, goldenrod)
+!endprocedure
+
+!procedure Agent(e_label)
+    $component(managers, e_label, moccasin)
+!endprocedure
+
+!procedure Links()
+    $gen_links(clients)
+    $gen_links(managers)
+    $gen_links(engines)
+    $gen_links(accessors)
+    $gen_links(resources)
+    $gen_links(utils, 1)
+
+    $gen_tier_links(clients, managers)
+    $gen_tier_links(managers, engines)
+    $gen_tier_links(engines, accessors)
+    $gen_tier_links(accessors, resources)
+!endprocedure
+
+!procedure System()
+    together {
+        TierClients() {
+            $render_components(clients)
+        }
+        TierManagers() {
+            $render_components(managers)
+        }
+        TierEngines() {
+            $render_components(engines)
+        }
+        TierAccessors() {
+            $render_components(accessors)
+        }
+        TierResources() {
+            $render_components(resources)
+        }
+    }
+
+    TierUtils() {
+        $render_components(utils)
+    }
+
+    Links()
+!endprocedure
