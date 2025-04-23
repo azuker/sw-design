@@ -14,6 +14,14 @@ skinparam component {
 
 hide <<Tier>> stereotype
 
+!if %not(%variable_exists("$ltr"))
+    !$ltr = 1
+!endif
+
+!if ($ltr == 1)
+    left to right direction
+!endif
+
 !$system_json = {
     "clients": {
         "count": 0,
@@ -58,6 +66,14 @@ hide <<Tier>> stereotype
         "maxDisplaySequence": 15
     }
 }
+
+!function $get_max($p1, $p2)
+    !if (%intval($p1) > %intval($p2))
+        !return %intval($p1)
+    !else
+        !return %intval($p2)
+    !endif
+!endfunction
 
 !procedure $component($tier_name, $label, $color = 0, $shape = rectangle)
     !$tier = $system_json[$tier_name]
@@ -109,20 +125,27 @@ hide <<Tier>> stereotype
 
         !if ($counter > 1)
             !$dep_number = $counter - 1
+            !$double = 1
 
             !if ($counter > $max_components)
                 !$dep_number = $dep_number + 1 - $max_components
-                !$dep = $prefix + %string($dep_number)
-
                 !if ($down > 0)
-                    $dep -[hidden] $current
+                    !$double = 0
+                !endif
+            !elseif ($down == 0)
+                !$double = 0
+            !endif
+
+            !$dep = $prefix + %string($dep_number)
+            
+            !if ($double == 1)
+                !if ($ltr == 1)
+                    $current -[hidden] $dep
                 !else
                     $dep -[hidden]- $current
                 !endif
             !else
-                !$dep = $prefix + %string($dep_number)
-
-                !if ($down > 0)
+                !if ($ltr == 1)
                     $dep -[hidden]- $current
                 !else
                     $dep -[hidden] $current
@@ -143,6 +166,11 @@ hide <<Tier>> stereotype
 !endprocedure
 
 !procedure $gen_tier_links($source, $target)
+    !$dir = down
+    !if ($ltr == 1)
+        !$dir = right
+    !endif
+
     !$source_tier = $system_json[$source]
     !$target_tier = $system_json[$target]
 
@@ -152,25 +180,27 @@ hide <<Tier>> stereotype
     !if ($count == 0)
         $source -[hidden]- $target
     !else
-        !$rows = %intval($count / ($max_components + 1))
-        !if ($rows == 0)
-            $source -[hidden]- $target
-        !elseif ($rows == 1)
-            $source --[hidden]- $target
+        !$rows = %intval($count / $max_components)
+        !if (%mod($count, $max_components) > 0)
+            !$rows = $rows + 1
+        !endif
+
+        !if ($rows == 1)
+            $source -[hidden]$dir- $target
         !elseif ($rows == 2)
-            $source ---[hidden]- $target
+            $source --[hidden]$dir- $target
         !elseif ($rows == 3)
-            $source ----[hidden]- $target
+            $source ---[hidden]$dir- $target
         !elseif ($rows == 4)
-            $source ------[hidden]- $target
+            $source ----[hidden]$dir- $target
         !elseif ($rows == 5)
-            $source -------[hidden]- $target
+            $source -----[hidden]$dir- $target
         !elseif ($rows == 6)
-            $source --------[hidden]- $target
+            $source ------[hidden]$dir- $target
         !elseif ($rows == 7)
-            $source ---------[hidden]- $target
+            $source -------[hidden]$dir- $target
         !elseif ($rows == 8)
-            $source ----------[hidden]- $target
+            $source --------[hidden]$dir- $target
         !endif
     !endif
 !endprocedure
@@ -239,6 +269,29 @@ hide <<Tier>> stereotype
     $component(managers, e_label, moccasin)
 !endprocedure
 
+!procedure $utils_positioning()
+    !if ($ltr == 1)
+        !$max = %intval($system_json.clients.maxDisplaySequence)
+        !$max = $get_max($max, $system_json.managers.maxDisplaySequence)
+        !$max = $get_max($max, $system_json.engines.maxDisplaySequence)
+        !$max = $get_max($max, $system_json.accessors.maxDisplaySequence)
+        !$max = $get_max($max, $system_json.resources.maxDisplaySequence)
+
+        !$arrow = "-[hidden]"
+        !while ($max > 0)
+            !$arrow = $arrow + "-"
+            !$max = $max - 1
+        !endwhile
+
+        clients $arrow utils
+        ' NOTE - these might be needed, re-evaluate after a while
+        'managers $arrow utils
+        'engines $arrow utils
+        'accessors $arrow utils
+        'resources $arrow utils
+    !endif
+!endprocedure
+
 !procedure Links()
     $gen_links(clients)
     $gen_links(managers)
@@ -251,10 +304,17 @@ hide <<Tier>> stereotype
     $gen_tier_links(managers, engines)
     $gen_tier_links(engines, accessors)
     $gen_tier_links(accessors, resources)
+
+    $utils_positioning()
 !endprocedure
 
 !procedure System()
-    together {
+    Subsystem() {
+        !if ($ltr == 1)
+            TierUtils() {
+                $render_components(utils)
+            }
+        !endif
         TierClients() {
             $render_components(clients)
         }
@@ -272,9 +332,11 @@ hide <<Tier>> stereotype
         }
     }
 
-    TierUtils() {
-        $render_components(utils)
-    }
+    !if ($ltr == 0)
+        TierUtils() {
+            $render_components(utils)
+        }
+    !endif
 
     Links()
 !endprocedure
