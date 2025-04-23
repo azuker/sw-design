@@ -2,6 +2,45 @@
 
 ## Examples
 
+### Quick
+
+```plantuml
+@startuml
+
+title File Management Subsystem
+
+!define ThemePath https://azuker.github.io/sw-design/puml/theme
+!include ThemePath//system.puml
+
+Client("WebAPI")
+Client("Timer")
+Client("Message")
+
+Manager("Colleczzzzxtion")
+Manager("Stream")
+Manager("Sanitation")
+Manager("Housekeeping")
+
+Engine("Analyze")
+Engine("Produce")
+
+Accessor("Files")
+Accessor("Blobs")
+Accessor("Sanitizer")
+
+Db("Containers")
+Resource("Blob Storage")
+Resource("Sanitizer")
+
+Util("Message Bus")
+Util("Workflow")
+Util("Security")
+
+System()
+
+@enduml
+```
+
 ### Basic
 
 ```plantuml
